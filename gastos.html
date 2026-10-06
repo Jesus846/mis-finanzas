@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Gastos - Mis Finanzas</title>
+
+    <link
+        rel="stylesheet"
+        href="css/app.css">
+
+</head>
+
+
+<body>
+
+
+    <!-- ==================================================
+         MENÚ
+         ================================================== -->
+
+    <div id="menuPrincipal"></div>
+
+
+    <!-- ==================================================
+         CONTENIDO
+         ================================================== -->
+
+    <main class="contenido-principal">
+
+
+        <!-- ==================================================
+             HEADER
+             ================================================== -->
+
+        <header class="app-header">
+
+            <div>
+
+                <h1>
+                    💸 Gastos
+                </h1>
+
+                <p id="fechaActual">
+                    Cargando fecha...
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <span id="usuarioNombre">
+                    Usuario
+                </span>
+
+            </div>
+
+        </header>
+
+
+        <!-- ==================================================
+             ESTADO DE CONEXIÓN
+             ================================================== -->
+
+        <div
+            id="estadoConexion"
+            class="estado-conexion">
+
+            Comprobando conexión...
+
+        </div>
+
+
+        <!-- ==================================================
+             RESUMEN
+             ================================================== -->
+
+        <section class="dashboard-resumen">
+
+
+            <div class="dashboard-card principal">
+
+                <span>
+                    📉 Total de gastos
+                </span>
+
+                <strong id="totalGastosSeccion">
+                    $0.00
+                </strong>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <span>
+                    📋 Gastos registrados
+                </span>
+
+                <strong id="cantidadGastos">
+                    0
+                </strong>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ==================================================
+             LISTA DE GASTOS
+             ================================================== -->
+
+        <section class="panel-dashboard">
+
+
+            <div class="panel-dashboard-titulo">
+
+                <div>
+
+                    <h2>
+                        Mis gastos
+                    </h2>
+
+                    <p>
+                        Registra y controla en qué gastas tu dinero.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="btn-primary"
+                    onclick="nuevoGasto()">
+
+                    + Nuevo gasto
+
+                </button>
+
+            </div>
+
+
+            <div id="listaGastos">
+
+                <div class="dashboard-vacio">
+
+                    <span>
+                        💸
+                    </span>
+
+                    <p>
+                        Cargando gastos...
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+    <!-- ==================================================
+         MODAL GASTO
+         ================================================== -->
+
+    <div
+        id="modalGasto"
+        class="modal-overlay"
+        style="display:none;">
+
+
+        <div class="modal">
+
+
+            <!-- HEADER -->
+
+            <div class="modal-header">
+
+                <h2 id="modalGastoTitulo">
+                    Nuevo gasto
+                </h2>
+
+
+                <button
+                    type="button"
+                    onclick="cerrarModalGasto()">
+
+                    ✕
+
+                </button>
+
+            </div>
+
+
+            <!-- CUERPO -->
+
+            <div class="modal-body">
+
+
+                <!-- ==========================================
+                     CONCEPTO
+                     ========================================== -->
+
+                <label for="gastoConcepto">
+
+                    Concepto
+
+                </label>
+
+                <input
+                    type="text"
+                    id="gastoConcepto"
+                    placeholder="Ej. Comida, gasolina, renta..."
+                    autocomplete="off">
+
+
+                <!-- ==========================================
+                     IMPORTE
+                     ========================================== -->
+
+                <label for="gastoImporte">
+
+                    Importe
+
+                </label>
+
+                <input
+                    type="number"
+                    id="gastoImporte"
+                    step="0.01"
+                    min="0"
+                    placeholder="0.00">
+
+
+                <!-- ==========================================
+                     FECHA
+                     ========================================== -->
+
+                <label for="gastoFecha">
+
+                    Fecha
+
+                </label>
+
+                <input
+                    type="date"
+                    id="gastoFecha">
+
+
+                <!-- ==========================================
+                     TIPO
+                     ========================================== -->
+
+                <label for="gastoTipo">
+
+                    Tipo de gasto
+
+                </label>
+
+                <select id="gastoTipo">
+
+                    <option value="variable">
+                        Variable
+                    </option>
+
+                    <option value="fijo">
+                        Fijo
+                    </option>
+
+                    <option value="extraordinario">
+                        Extraordinario
+                    </option>
+
+                </select>
+
+
+                <!-- ==========================================
+                     MÉTODO DE PAGO
+                     ========================================== -->
+
+                <label for="gastoMetodoPago">
+
+                    Método de pago
+
+                </label>
+
+                <select id="gastoMetodoPago">
+
+                    <option value="debito">Cuenta bancaria</option>
+                    <option value="efectivo">Efectivo</option>
+                    <option value="transferencia">Transferencia</option>
+                    <option value="otro">Otro</option>
+
+                </select>
+
+
+                <!-- ==========================================
+                     CUENTA
+                     ========================================== -->
+
+                <div id="contenedorGastoCuenta">
+
+                    <label for="gastoCuenta">
+
+                        Cuenta utilizada
+
+                    </label>
+
+                    <select id="gastoCuenta">
+
+                        <option value="">
+
+                            Selecciona una cuenta
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- ==========================================
+                     CATEGORÍA
+                     ========================================== -->
+
+                <label for="gastoCategoria">
+
+                    Categoría
+
+                </label>
+
+                <select id="gastoCategoria">
+
+                    <option value="">
+
+                        Selecciona una categoría
+
+                    </option>
+
+                </select>
+
+
+                <!-- ==========================================
+                     RECURRENTE
+                     ========================================== -->
+
+                <label class="checkbox-label">
+
+                    <input
+                        type="checkbox"
+                        id="gastoRecurrente">
+
+                    <span>
+                        Gasto recurrente
+                    </span>
+
+                </label>
+
+
+                <!-- ==========================================
+                     MENSAJE
+                     ========================================== -->
+
+                <div
+                    id="mensajeGastoModal"
+                    class="mensaje-modal">
+
+                </div>
+
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="modal-footer">
+
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    onclick="cerrarModalGasto()">
+
+                    Cancelar
+
+                </button>
+
+
+                <button
+                    type="button"
+                    id="btnGuardarGasto"
+                    class="btn-primary"
+                    onclick="guardarGasto()">
+
+                    Guardar gasto
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         SCRIPTS
+         ================================================== -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/menu.js"></script>
+<script src="js/app.js"></script>
+<script src="js/gastos.js"></script>
+
+    <!-- ==================================================
+         SESIÓN
+         ================================================== -->
+
+    <script>
+
+        async function comprobarSesionGastos() {
+
+            try {
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient
+                        .auth
+                        .getSession();
+
+
+                if (
+                    error ||
+                    !data.session
+                ) {
+
+                    window.location.href =
+                        "login.html";
+
+                    return;
+
+                }
+
+
+                const usuario =
+                    data.session.user;
+
+
+                const nombre =
+                    usuario.user_metadata?.nombre ||
+                    usuario.user_metadata?.name ||
+                    usuario.email ||
+                    "Usuario";
+
+
+                const elemento =
+                    document.getElementById(
+                        "usuarioNombre"
+                    );
+
+
+                if (elemento) {
+
+                    elemento.textContent =
+                        nombre;
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "Error comprobando sesión:",
+                    error
+                );
+
+                window.location.href =
+                    "login.html";
+
+            }
+
+        }
+
+
+        comprobarSesionGastos();
+
+    </script>
+
+
+</body>
+
+</html>

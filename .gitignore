@@ -1,0 +1,24 @@
+# Archivos del sistema
+Thumbs.db
+Desktop.ini
+
+# Archivos temporales
+*.tmp
+*.temp
+*.log
+
+# Editor / IDE
+.vscode/
+.idea/
+
+# Node
+node_modules/
+
+# Variables y secretos locales
+.env
+.env.local
+.env.*.local
+
+# Respaldos
+*.bak
+*.backup

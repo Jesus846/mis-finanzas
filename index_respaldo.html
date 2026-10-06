@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#8b0000"
+    >
+
+    <title>
+        Mis Finanzas
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="css/app.css"
+    >
+
+</head>
+
+
+<body>
+
+    <!-- ==================================================
+         ENCABEZADO
+    =================================================== -->
+
+    <header class="app-header">
+
+        <div class="header-contenido">
+
+            <div>
+
+                <h1>
+                    Mis Finanzas
+                </h1>
+
+                <p id="fechaActual">
+                    Cargando fecha...
+                </p>
+
+            </div>
+
+
+            <div class="usuario-header">
+
+                <span id="usuarioNombre">
+                    Cargando usuario...
+                </span>
+
+                <button
+                    type="button"
+                    onclick="cerrarSesion()"
+                >
+                    Cerrar sesión
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- ==================================================
+         CONTENIDO PRINCIPAL
+    =================================================== -->
+
+    <main class="contenedor">
+
+
+        <!-- ==================================================
+             RESUMEN GENERAL
+        =================================================== -->
+
+        <section class="resumen-grid">
+
+
+            <!-- DINERO DISPONIBLE -->
+
+            <div class="resumen-card">
+
+                <span>
+                    Dinero disponible
+                </span>
+
+                <strong id="dineroDisponible">
+                    $0.00
+                </strong>
+
+            </div>
+
+
+            <!-- INGRESOS -->
+
+            <div class="resumen-card">
+
+                <span>
+                    Ingresos registrados
+                </span>
+
+                <strong id="totalIngresos">
+                    $0.00
+                </strong>
+
+            </div>
+
+
+            <!-- GASTOS -->
+
+            <div class="resumen-card">
+
+                <span>
+                    Gastos registrados
+                </span>
+
+                <!--
+                    IMPORTANTE:
+                    Este ID es diferente al total de la
+                    sección de gastos para evitar conflictos.
+                -->
+
+                <strong id="totalGastosResumen">
+                    $0.00
+                </strong>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ==================================================
+             ESTADO DE CONEXIÓN
+        =================================================== -->
+
+        <div
+            id="estadoConexion"
+            class="estado-conexion"
+        >
+            Comprobando conexión...
+        </div>
+
+
+        <!-- ==================================================
+             CUENTAS
+        =================================================== -->
+
+        <section class="seccion">
+
+            <div class="seccion-header">
+
+                <div>
+
+                    <h2>
+                        🏦 Cuentas
+                    </h2>
+
+                    <p>
+                        Dinero disponible en tus cuentas.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="btn-primary"
+                    type="button"
+                    onclick="nuevaCuenta()"
+                >
+                    + Nueva cuenta
+                </button>
+
+            </div>
+
+
+            <div id="listaCuentas">
+
+                <div class="loading">
+                    Cargando cuentas...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             INGRESOS
+        =================================================== -->
+
+        <section class="seccion">
+
+            <div class="seccion-header">
+
+                <div>
+
+                    <h2>
+                        💰 Ingresos
+                    </h2>
+
+                    <p>
+                        Registra tus ingresos y entradas de dinero.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="btn-primary"
+                    type="button"
+                    onclick="nuevoIngreso()"
+                >
+                    + Nuevo ingreso
+                </button>
+
+            </div>
+
+
+            <div class="seccion-total">
+
+                <span>
+                    Total de ingresos
+                </span>
+
+                <strong id="totalIngresosSeccion">
+                    $0.00
+                </strong>
+
+            </div>
+
+
+            <div id="listaIngresos">
+
+                <div class="loading">
+                    Cargando ingresos...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             GASTOS
+        =================================================== -->
+
+        <section class="seccion">
+
+            <div class="seccion-header">
+
+                <div>
+
+                    <h2>
+                        💸 Gastos
+                    </h2>
+
+                    <p>
+                        Registra tus gastos que salen directamente de una cuenta.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="btn-primary"
+                    type="button"
+                    onclick="nuevoGasto()"
+                >
+                    + Nuevo gasto
+                </button>
+
+            </div>
+
+
+            <div class="seccion-total">
+
+                <span>
+                    Total de gastos
+                </span>
+
+                <!--
+                    Este ID es exclusivo de la sección.
+                    gastos.js actualiza este elemento.
+                -->
+
+                <strong id="totalGastos">
+                    $0.00
+                </strong>
+
+            </div>
+
+
+            <div id="listaGastos">
+
+                <div class="loading">
+                    Cargando gastos...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             TARJETAS
+        =================================================== -->
+
+        <section class="seccion">
+
+            <div class="seccion-header">
+
+                <div>
+
+                    <h2>
+                        💳 Tarjetas
+                    </h2>
+
+                    <p>
+                        Control de tus tarjetas y compras.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="btn-primary"
+                    type="button"
+                    onclick="nuevaTarjeta()"
+                >
+                    + Nueva tarjeta
+                </button>
+
+            </div>
+
+
+            <!-- ==================================================
+                 RESUMEN DE PAGOS DE TARJETAS
+            =================================================== -->
+
+            <div class="resumen-pagos-tarjetas">
+
+
+                <div class="resumen-pagos-header">
+
+                    <div>
+
+                        <h3>
+                            📊 Resumen de pagos de tarjetas
+                        </h3>
+
+                        <p>
+                            Aquí puedes ver cuánto corresponde pagar
+                            de cada tarjeta en el periodo actual.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="btn-primary"
+                        onclick="registrarTodosLosPagosTarjetas()"
+                    >
+                        💳 Ya pagué estos pagos
+                    </button>
+
+                </div>
+
+
+                <div id="resumenTarjetas">
+
+                    <div class="loading">
+                        Cargando resumen...
+                    </div>
+
+                </div>
+
+
+                <div class="resumen-total-general">
+
+                    <span>
+                        Total de pagos de tarjetas
+                    </span>
+
+                    <strong id="totalPagoTarjetas">
+                        $0.00
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==================================================
+                 LISTA DE TARJETAS
+            =================================================== -->
+
+            <div id="listaTarjetas">
+
+                <div class="loading">
+                    Cargando tarjetas...
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- ==================================================
+         MODAL CUENTA
+    =================================================== -->
+
+    <div
+        id="modalCuenta"
+        class="modal"
+        style="display:none;"
+    >
+
+        <div class="modal-contenido">
+
+            <div class="modal-header">
+
+                <h2 id="modalCuentaTitulo">
+                    Nueva cuenta
+                </h2>
+
+                <button
+                    type="button"
+                    onclick="cerrarModalCuenta()"
+                >
+                    ✕
+                </button>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="cuentaNombre">
+                    Nombre
+                </label>
+
+                <input
+                    type="text"
+                    id="cuentaNombre"
+                    placeholder="Ej. Cuenta BBVA"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="cuentaTipo">
+                    Tipo
+                </label>
+
+                <select id="cuentaTipo">
+
+                    <option value="debito">
+                        Débito
+                    </option>
+
+                    <option value="efectivo">
+                        Efectivo
+                    </option>
+
+                    <option value="ahorro">
+                        Ahorro
+                    </option>
+
+                    <option value="otro">
+                        Otro
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="cuentaSaldo">
+                    Saldo inicial
+                </label>
+
+                <input
+                    type="number"
+                    id="cuentaSaldo"
+                    step="0.01"
+                    min="0"
+                    placeholder="0.00"
+                >
+
+            </div>
+
+
+            <div
+                id="mensajeCuentaModal"
+                class="mensaje-modal"
+                style="display:none;"
+            ></div>
+
+
+            <div class="modal-acciones">
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    onclick="cerrarModalCuenta()"
+                >
+                    Cancelar
+                </button>
+
+
+                <button
+                    type="button"
+                    class="btn-primary"
+                    id="btnGuardarCuenta"
+                    onclick="guardarCuenta()"
+                >
+                    Guardar cuenta
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         MODAL INGRESO
+    =================================================== -->
+
+    <div
+        id="modalIngreso"
+        class="modal"
+        style="display:none;"
+    >
+
+        <div class="modal-contenido">
+
+            <div class="modal-header">
+
+                <h2 id="modalIngresoTitulo">
+                    Nuevo ingreso
+                </h2>
+
+                <button
+                    type="button"
+                    onclick="cerrarModalIngreso()"
+                >
+                    ✕
+                </button>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="ingresoConcepto">
+                    Concepto
+                </label>
+
+                <input
+                    type="text"
+                    id="ingresoConcepto"
+                    placeholder="Ej. Sueldo"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="ingresoImporte">
+                    Importe
+                </label>
+
+                <input
+                    type="number"
+                    id="ingresoImporte"
+                    step="0.01"
+                    min="0"
+                    placeholder="0.00"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="ingresoFecha">
+                    Fecha
+                </label>
+
+                <input
+                    type="date"
+                    id="ingresoFecha"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="ingresoFrecuencia">
+                    Frecuencia
+                </label>
+
+                <select id="ingresoFrecuencia">
+
+                    <option value="unico">
+                        Único
+                    </option>
+
+                    <option value="semanal">
+                        Semanal
+                    </option>
+
+                    <option value="quincenal">
+                        Quincenal
+                    </option>
+
+                    <option value="mensual">
+                        Mensual
+                    </option>
+
+                    <option value="anual">
+                        Anual
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="ingresoCuenta">
+                    Cuenta
+                </label>
+
+                <select id="ingresoCuenta">
+
+                    <option value="">
+                        Selecciona una cuenta
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div
+                id="mensajeIngresoModal"
+                class="mensaje-modal"
+                style="display:none;"
+            ></div>
+
+
+            <div class="modal-acciones">
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    onclick="cerrarModalIngreso()"
+                >
+                    Cancelar
+                </button>
+
+
+                <button
+                    type="button"
+                    class="btn-primary"
+                    id="btnGuardarIngreso"
+                    onclick="guardarIngreso()"
+                >
+                    Guardar ingreso
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         MODAL GASTO
+    =================================================== -->
+
+    <div
+        id="modalGasto"
+        class="modal"
+        style="display:none;"
+    >
+
+        <div class="modal-contenido">
+
+            <div class="modal-header">
+
+                <h2 id="modalGastoTitulo">
+                    Nuevo gasto
+                </h2>
+
+                <button
+                    type="button"
+                    onclick="cerrarModalGasto()"
+                >
+                    ✕
+                </button>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="gastoConcepto">
+                    Concepto
+                </label>
+
+                <input
+                    type="text"
+                    id="gastoConcepto"
+                    placeholder="Ej. Comida"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="gastoImporte">
+                    Importe
+                </label>
+
+                <input
+                    type="number"
+                    id="gastoImporte"
+                    step="0.01"
+                    min="0"
+                    placeholder="0.00"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="gastoFecha">
+                    Fecha
+                </label>
+
+                <input
+                    type="date"
+                    id="gastoFecha"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="gastoTipo">
+                    Tipo de gasto
+                </label>
+
+                <select id="gastoTipo">
+
+                    <option value="variable">
+                        Variable
+                    </option>
+
+                    <option value="fijo">
+                        Fijo
+                    </option>
+
+                    <option value="extraordinario">
+                        Extraordinario
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="gastoMetodoPago">
+                    Método de pago
+                </label>
+
+                <select id="gastoMetodoPago">
+
+                    <option value="efectivo">
+                        Efectivo
+                    </option>
+
+                    <option value="debito">
+                        Débito
+                    </option>
+
+                    <option value="transferencia">
+                        Transferencia
+                    </option>
+
+                    <option value="otro">
+                        Otro
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="gastoCuenta">
+                    Cuenta
+                </label>
+
+                <select id="gastoCuenta">
+
+                    <option value="">
+                        Selecciona una cuenta
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="gastoCategoria">
+                    Categoría
+                </label>
+
+                <select id="gastoCategoria">
+
+                    <option value="">
+                        Selecciona una categoría
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    <input
+                        type="checkbox"
+                        id="gastoRecurrente"
+                    >
+
+                    Gasto recurrente
+                </label>
+
+            </div>
+
+
+            <div
+                id="mensajeGastoModal"
+                class="mensaje-modal"
+                style="display:none;"
+            ></div>
+
+
+            <div class="modal-acciones">
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    onclick="cerrarModalGasto()"
+                >
+                    Cancelar
+                </button>
+
+
+                <button
+                    type="button"
+                    class="btn-primary"
+                    id="btnGuardarGasto"
+                    onclick="guardarGasto()"
+                >
+                    Guardar gasto
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         MODAL TARJETA
+    =================================================== -->
+
+    <div
+        id="modalTarjeta"
+        class="modal"
+        style="display:none;"
+    >
+
+        <div class="modal-contenido">
+
+            <div class="modal-header">
+
+                <h2 id="modalTarjetaTitulo">
+                    Nueva tarjeta
+                </h2>
+
+                <button
+                    type="button"
+                    onclick="cerrarModalTarjeta()"
+                >
+                    ✕
+                </button>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="tarjetaNombre">
+                    Nombre de la tarjeta
+                </label>
+
+                <input
+                    type="text"
+                    id="tarjetaNombre"
+                    placeholder="Ej. Tarjeta Azul"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="tarjetaBanco">
+                    Banco
+                </label>
+
+                <input
+                    type="text"
+                    id="tarjetaBanco"
+                    placeholder="Ej. BBVA"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="tarjetaLimite">
+                    Límite de crédito
+                </label>
+
+                <input
+                    type="number"
+                    id="tarjetaLimite"
+                    step="0.01"
+                    min="0"
+                    placeholder="0.00"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="tarjetaDiaCorte">
+                    Día de corte
+                </label>
+
+                <input
+                    type="number"
+                    id="tarjetaDiaCorte"
+                    min="1"
+                    max="31"
+                    placeholder="Ej. 15"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="tarjetaDiaPago">
+                    Día de pago
+                </label>
+
+                <input
+                    type="number"
+                    id="tarjetaDiaPago"
+                    min="1"
+                    max="31"
+                    placeholder="Ej. 30"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="tarjetaNotas">
+                    Notas
+                </label>
+
+                <textarea
+                    id="tarjetaNotas"
+                    rows="3"
+                    placeholder="Notas opcionales"
+                ></textarea>
+
+            </div>
+
+
+            <div
+                id="mensajeTarjetaModal"
+                class="mensaje-modal"
+                style="display:none;"
+            ></div>
+
+
+            <div class="modal-acciones">
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    onclick="cerrarModalTarjeta()"
+                >
+                    Cancelar
+                </button>
+
+
+                <button
+                    type="button"
+                    class="btn-primary"
+                    id="btnGuardarTarjeta"
+                    onclick="guardarTarjeta()"
+                >
+                    Guardar tarjeta
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         MODAL COMPRA TARJETA
+    =================================================== -->
+
+    <div
+        id="modalCompraTarjeta"
+        class="modal"
+        style="display:none;"
+    >
+
+        <div class="modal-contenido">
+
+            <div class="modal-header">
+
+                <h2 id="modalCompraTarjetaTitulo">
+                    Nueva compra
+                </h2>
+
+                <button
+                    type="button"
+                    onclick="cerrarModalCompraTarjeta()"
+                >
+                    ✕
+                </button>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="compraTarjetaConcepto">
+                    Concepto
+                </label>
+
+                <input
+                    type="text"
+                    id="compraTarjetaConcepto"
+                    placeholder="Ej. Supermercado"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="compraTarjetaMonto">
+                    Monto
+                </label>
+
+                <input
+                    type="number"
+                    id="compraTarjetaMonto"
+                    step="0.01"
+                    min="0"
+                    placeholder="0.00"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="compraTarjetaTipo">
+                    Tipo de compra
+                </label>
+
+                <select id="compraTarjetaTipo">
+
+                    <option value="normal">
+                        Contado
+                    </option>
+
+                    <option value="meses">
+                        Meses sin intereses
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div
+                id="camposCompraMeses"
+                style="display:none;"
+            >
+
+                <div class="form-group">
+
+                    <label for="compraTarjetaMeses">
+                        Número de meses
+                    </label>
+
+                    <input
+                        type="number"
+                        id="compraTarjetaMeses"
+                        min="2"
+                        step="1"
+                        placeholder="Ej. 12"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="compraTarjetaFechaPrimerPago">
+                        Fecha del primer pago
+                    </label>
+
+                    <input
+                        type="date"
+                        id="compraTarjetaFechaPrimerPago"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="compraTarjetaMensualidad">
+                        Mensualidad
+                    </label>
+
+                    <input
+                        type="number"
+                        id="compraTarjetaMensualidad"
+                        step="0.01"
+                        readonly
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="compraTarjetaFecha">
+                    Fecha de compra
+                </label>
+
+                <input
+                    type="date"
+                    id="compraTarjetaFecha"
+                >
+
+            </div>
+
+
+            <div
+                id="mensajeCompraTarjetaModal"
+                class="mensaje-modal"
+                style="display:none;"
+            ></div>
+
+
+            <div class="modal-acciones">
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    onclick="cerrarModalCompraTarjeta()"
+                >
+                    Cancelar
+                </button>
+
+
+                <button
+                    type="button"
+                    class="btn-primary"
+                    id="btnGuardarCompraTarjeta"
+                    onclick="guardarCompraTarjeta()"
+                >
+                    Guardar compra
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         SCRIPTS
+    =================================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+
+    <script
+        src="js/config.js"
+    ></script>
+
+
+    <script
+        src="js/supabase.js"
+    ></script>
+
+
+    <script
+        src="js/auth.js"
+    ></script>
+
+
+    <script
+        src="js/cuentas.js"
+    ></script>
+
+
+    <script
+        src="js/ingresos.js"
+    ></script>
+
+
+    <script
+        src="js/gastos.js"
+    ></script>
+
+
+    <script
+        src="js/tarjetas.js"
+    ></script>
+
+
+    <script
+        src="js/compras_tarjeta.js"
+    ></script>
+
+
+    <script
+        src="js/app.js"
+    ></script>
+
+
+    <!-- ==================================================
+         COMPROBAR SESIÓN
+    =================================================== -->
+
+    <script>
+
+        async function comprobarSesion() {
+
+            try {
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient
+                        .auth
+                        .getSession();
+
+
+                if (
+                    error ||
+                    !data ||
+                    !data.session
+                ) {
+
+                    window.location.href =
+                        "login.html";
+
+                    return;
+                }
+
+
+                const usuario =
+                    data.session.user;
+
+
+                const elemento =
+                    document.getElementById(
+                        "usuarioNombre"
+                    );
+
+
+                if (elemento) {
+
+                    const nombre =
+                        usuario.user_metadata?.nombre ||
+                        usuario.user_metadata?.name ||
+                        usuario.email ||
+                        "Usuario";
+
+
+                    elemento.textContent =
+                        nombre;
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "Error comprobando sesión:",
+                    error
+                );
+
+                window.location.href =
+                    "login.html";
+            }
+
+        }
+
+
+        comprobarSesion();
+
+    </script>
+
+
+</body>
+
+</html>

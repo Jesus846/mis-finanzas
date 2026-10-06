@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#8b0000">
+
+    <title>Mis Finanzas - Acceso</title>
+
+    <link rel="stylesheet" href="css/app.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/auth.js"></script>
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <div class="login-card">
+
+        <div class="login-logo">
+            💰
+        </div>
+
+        <h1>Mis Finanzas</h1>
+
+        <p class="login-subtitle">
+            Controla tu dinero, gastos y deudas
+        </p>
+
+        <!-- LOGIN -->
+
+        <div id="loginForm">
+
+            <h2>Iniciar sesión</h2>
+
+            <div class="form-group">
+                <label for="loginEmail">Correo electrónico</label>
+
+                <input
+                    type="email"
+                    id="loginEmail"
+                    placeholder="correo@ejemplo.com"
+                    autocomplete="email"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="loginPassword">Contraseña</label>
+
+                <input
+                    type="password"
+                    id="loginPassword"
+                    placeholder="Contraseña"
+                    autocomplete="current-password"
+                >
+            </div>
+
+            <button
+                class="btn-primary"
+                onclick="iniciarSesion()"
+            >
+                Iniciar sesión
+            </button>
+
+            <p id="loginMessage" class="message"></p>
+
+            <div class="login-links">
+                <button onclick="mostrarRegistro()">
+                    Crear una cuenta
+                </button>
+            </div>
+
+        </div>
+
+
+        <!-- REGISTRO -->
+
+        <div id="registerForm" style="display:none;">
+
+            <h2>Crear cuenta</h2>
+
+            <div class="form-group">
+
+                <label for="registerName">
+                    Nombre
+                </label>
+
+                <input
+                    type="text"
+                    id="registerName"
+                    placeholder="Tu nombre"
+                    autocomplete="name"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="registerEmail">
+                    Correo electrónico
+                </label>
+
+                <input
+                    type="email"
+                    id="registerEmail"
+                    placeholder="correo@ejemplo.com"
+                    autocomplete="email"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="registerPassword">
+                    Contraseña
+                </label>
+
+                <input
+                    type="password"
+                    id="registerPassword"
+                    placeholder="Mínimo 6 caracteres"
+                    autocomplete="new-password"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="registerPassword2">
+                    Confirmar contraseña
+                </label>
+
+                <input
+                    type="password"
+                    id="registerPassword2"
+                    placeholder="Repite tu contraseña"
+                    autocomplete="new-password"
+                >
+
+            </div>
+
+
+            <button
+                class="btn-primary"
+                onclick="registrarUsuario()"
+            >
+                Crear cuenta
+            </button>
+
+            <p id="registerMessage" class="message"></p>
+
+
+            <div class="login-links">
+
+                <button onclick="mostrarLogin()">
+                    Ya tengo una cuenta
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

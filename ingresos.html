@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Ingresos - Mis Finanzas</title>
+
+    <link
+        rel="stylesheet"
+        href="css/app.css">
+
+</head>
+
+
+<body>
+
+    <!-- ==================================================
+         MENÚ
+         ================================================== -->
+
+    <div id="menuPrincipal"></div>
+
+
+    <!-- ==================================================
+         CONTENIDO
+         ================================================== -->
+
+    <main class="contenido-principal">
+
+
+        <!-- HEADER -->
+
+        <header class="app-header">
+
+            <div>
+
+                <h1>💰 Ingresos</h1>
+
+                <p id="fechaActual">
+                    Cargando fecha...
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <span id="usuarioNombre">
+                    Usuario
+                </span>
+
+            </div>
+
+        </header>
+
+
+        <!-- ==================================================
+             ESTADO DE CONEXIÓN
+             ================================================== -->
+
+        <div
+            id="estadoConexion"
+            class="estado-conexion">
+
+            Comprobando conexión...
+
+        </div>
+
+
+        <!-- ==================================================
+             RESUMEN
+             ================================================== -->
+
+        <section class="dashboard-resumen">
+
+
+            <div class="dashboard-card principal">
+
+                <span>
+                    📈 Total de ingresos
+                </span>
+
+                <strong id="totalIngresosSeccion">
+                    $0.00
+                </strong>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <span>
+                    📋 Ingresos registrados
+                </span>
+
+                <strong id="cantidadIngresos">
+                    0
+                </strong>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ==================================================
+             BOTÓN NUEVO INGRESO
+             ================================================== -->
+
+        <section class="panel-dashboard">
+
+            <div class="panel-dashboard-titulo">
+
+                <div>
+
+                    <h2>
+                        Mis ingresos
+                    </h2>
+
+                    <p>
+                        Registra el dinero que recibes.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="btn-primary"
+                    onclick="nuevoIngreso()">
+
+                    + Nuevo ingreso
+
+                </button>
+
+            </div>
+
+
+            <!-- ==================================================
+                 LISTA
+                 ================================================== -->
+
+            <div id="listaIngresos">
+
+                <div class="dashboard-vacio">
+
+                    <span>💰</span>
+
+                    <p>
+                        Cargando ingresos...
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- ==================================================
+         MODAL INGRESO
+         ================================================== -->
+
+    <div
+        id="modalIngreso"
+        class="modal-overlay"
+        style="display:none;">
+
+        <div class="modal">
+
+
+            <!-- HEADER DEL MODAL -->
+
+            <div class="modal-header">
+
+                <h2 id="modalIngresoTitulo">
+                    Nuevo ingreso
+                </h2>
+
+
+                <button
+                    type="button"
+                    onclick="cerrarModalIngreso()">
+
+                    ✕
+
+                </button>
+
+            </div>
+
+
+            <!-- CUERPO -->
+
+            <div class="modal-body">
+
+
+                <!-- ==========================================
+                     CONCEPTO
+                     ========================================== -->
+
+                <label for="ingresoConcepto">
+
+                    Concepto
+
+                </label>
+
+                <input
+                    type="text"
+                    id="ingresoConcepto"
+                    placeholder="Ej. Sueldo, comisión, venta..."
+                    autocomplete="off">
+
+
+                <!-- ==========================================
+                     IMPORTE
+                     ========================================== -->
+
+                <label for="ingresoImporte">
+
+                    Importe
+
+                </label>
+
+                <input
+                    type="number"
+                    id="ingresoImporte"
+                    step="0.01"
+                    min="0"
+                    placeholder="0.00">
+
+
+                <!-- ==========================================
+                     FECHA
+                     ========================================== -->
+
+                <label for="ingresoFecha">
+
+                    Fecha
+
+                </label>
+
+                <input
+                    type="date"
+                    id="ingresoFecha">
+
+
+                <!-- ==========================================
+                     FRECUENCIA
+                     ========================================== -->
+
+                <label for="ingresoFrecuencia">
+
+                    Frecuencia
+
+                </label>
+
+                <select id="ingresoFrecuencia">
+
+                    <option value="quincenal">
+                        Quincenal
+                    </option>
+
+                    <option value="mensual">
+                        Mensual
+                    </option>
+
+                    <option value="semanal">
+                        Semanal
+                    </option>
+
+                    <option value="eventual">
+                        Eventual
+                    </option>
+
+                </select>
+
+
+                <!-- ==========================================
+                     CUENTA
+                     ========================================== -->
+
+                <label for="ingresoCuenta">
+
+                    Cuenta donde recibiste el dinero
+
+                </label>
+
+                <select id="ingresoCuenta">
+
+                    <option value="">
+
+                        Selecciona una cuenta
+
+                    </option>
+
+                </select>
+
+
+                <!-- ==========================================
+                     MENSAJE
+                     ========================================== -->
+
+                <div
+                    id="mensajeIngresoModal"
+                    class="mensaje-modal">
+
+                </div>
+
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="modal-footer">
+
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    onclick="cerrarModalIngreso()">
+
+                    Cancelar
+
+                </button>
+
+
+                <button
+                    type="button"
+                    id="btnGuardarIngreso"
+                    class="btn-primary"
+                    onclick="guardarIngreso()">
+
+                    Guardar ingreso
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         SCRIPTS
+         ================================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="js/config.js"></script>
+
+    <script src="js/supabase.js"></script>
+
+    <script src="js/auth.js"></script>
+
+    <script src="js/menu.js"></script>
+
+    <script src="js/ingresos.js"></script>
+
+
+    <!-- ==================================================
+         SESIÓN
+         ================================================== -->
+
+    <script>
+
+        async function comprobarSesionIngresos() {
+
+            try {
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient
+                        .auth
+                        .getSession();
+
+
+                if (
+                    error ||
+                    !data.session
+                ) {
+
+                    window.location.href =
+                        "login.html";
+
+                    return;
+
+                }
+
+
+                const usuario =
+                    data.session.user;
+
+
+                const nombre =
+                    usuario.user_metadata?.nombre ||
+                    usuario.user_metadata?.name ||
+                    usuario.email ||
+                    "Usuario";
+
+
+                const elemento =
+                    document.getElementById(
+                        "usuarioNombre"
+                    );
+
+
+                if (elemento) {
+
+                    elemento.textContent =
+                        nombre;
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "Error comprobando sesión:",
+                    error
+                );
+
+
+                window.location.href =
+                    "login.html";
+
+            }
+
+        }
+
+
+        comprobarSesionIngresos();
+
+    </script>
+
+
+</body>
+
+</html>

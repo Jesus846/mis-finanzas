@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Mis Finanzas</title>
+
+    <link
+        rel="stylesheet"
+        href="css/app.css">
+
+</head>
+
+
+<body>
+
+    <!-- ==================================================
+         MENÚ
+         ================================================== -->
+
+    <div id="menuPrincipal"></div>
+
+
+    <!-- ==================================================
+         CONTENIDO
+         ================================================== -->
+
+    <main class="contenido-principal">
+
+
+        <!-- HEADER -->
+
+        <header class="app-header">
+
+            <div>
+
+                <h1>Inicio</h1>
+
+                <p id="fechaActual">
+                    Cargando fecha...
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <span id="usuarioNombre">
+                    Usuario
+                </span>
+
+            </div>
+
+        </header>
+
+
+        <!-- ==================================================
+             ESTADO DE CONEXIÓN
+             ================================================== -->
+
+        <div
+            id="estadoConexion"
+            class="mensaje-conexion">
+
+            Comprobando conexión...
+
+        </div>
+
+
+        <!-- ==================================================
+             RESUMEN
+             ================================================== -->
+
+        <section class="dashboard-resumen">
+
+
+            <div class="dashboard-card principal">
+
+                <span>
+                    💰 Dinero disponible
+                </span>
+
+                <strong id="dineroDisponible">
+                    $0.00
+                </strong>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <span>
+                    📈 Ingresos
+                </span>
+
+                <strong id="totalIngresos">
+                    $0.00
+                </strong>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <span>
+                    📉 Gastos
+                </span>
+
+                <strong id="totalGastosResumen">
+                    $0.00
+                </strong>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <span>
+                    💳 Tarjetas
+                </span>
+
+                <strong id="totalPagoTarjetas">
+                    $0.00
+                </strong>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- ==================================================
+             PRÓXIMOS COMPROMISOS
+             ================================================== -->
+
+        <section class="panel-dashboard">
+
+            <div class="panel-dashboard-titulo">
+
+                <h2>
+                    📅 Próximos compromisos
+                </h2>
+
+                <a href="calendario.html">
+                    Ver calendario →
+                </a>
+
+            </div>
+
+
+            <div id="proximosCompromisos">
+
+                <div class="dashboard-vacio">
+
+                    <span>📅</span>
+
+                    <p>
+                        Todavía no hay compromisos
+                        registrados.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             RECOMENDACIONES
+             ================================================== -->
+
+        <section class="panel-dashboard">
+
+            <div class="panel-dashboard-titulo">
+
+                <h2>
+                    💡 Recomendaciones
+                </h2>
+
+                <a href="proyecciones.html">
+                    Ver proyecciones →
+                </a>
+
+            </div>
+
+
+            <div id="recomendaciones">
+
+                <div class="dashboard-vacio">
+
+                    <span>💡</span>
+
+                    <p>
+                        Cuando tengamos tus ingresos,
+                        gastos y deudas podremos mostrar
+                        recomendaciones.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             ACCESOS RÁPIDOS
+             ================================================== -->
+
+        <section class="panel-dashboard">
+
+            <h2>
+                Accesos rápidos
+            </h2>
+
+
+            <div class="accesos-rapidos">
+
+
+                <a href="ingresos.html">
+
+                    <span>💰</span>
+
+                    <strong>
+                        Registrar ingreso
+                    </strong>
+
+                    <small>
+                        Agregar dinero recibido
+                    </small>
+
+                </a>
+
+
+                <a href="gastos.html">
+
+                    <span>💸</span>
+
+                    <strong>
+                        Registrar gasto
+                    </strong>
+
+                    <small>
+                        Registrar una compra o gasto
+                    </small>
+
+                </a>
+
+
+                <a href="tarjetas.html">
+
+                    <span>💳</span>
+
+                    <strong>
+                        Tarjetas
+                    </strong>
+
+                    <small>
+                        Consultar compras y pagos
+                    </small>
+
+                </a>
+
+
+                <a href="deudas.html">
+
+                    <span>💰</span>
+
+                    <strong>
+                        Deudas
+                    </strong>
+
+                    <small>
+                        Consultar lo que debes
+                    </small>
+
+                </a>
+
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- ==================================================
+         SCRIPTS
+         ================================================== -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="js/config.js"></script>
+
+<script src="js/supabase.js"></script>
+
+<script src="js/auth.js"></script>
+
+<script src="js/menu.js"></script>
+
+<script src="js/dashboard.js"></script>
+
+    <!-- ==================================================
+         SESIÓN
+         ================================================== -->
+
+    <script>
+
+        async function comprobarSesionInicio() {
+
+            try {
+
+                const {
+                    data,
+                    error
+                } = await supabaseClient.auth.getSession();
+
+
+                if (error) {
+
+                    console.error(
+                        "Error obteniendo sesión:",
+                        error
+                    );
+
+                    window.location.href =
+                        "login.html";
+
+                    return;
+                }
+
+
+                const session =
+                    data.session;
+
+
+                if (!session) {
+
+                    window.location.href =
+                        "login.html";
+
+                    return;
+                }
+
+
+                const usuario =
+                    session.user;
+
+
+                const nombre =
+                    usuario.user_metadata?.nombre ||
+                    usuario.user_metadata?.name ||
+                    usuario.email ||
+                    "Usuario";
+
+
+                const elemento =
+                    document.getElementById(
+                        "usuarioNombre"
+                    );
+
+
+                if (elemento) {
+
+                    elemento.textContent =
+                        nombre;
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "Error comprobando sesión:",
+                    error
+                );
+
+                window.location.href =
+                    "login.html";
+
+            }
+
+        }
+
+
+        comprobarSesionInicio();
+
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Proyecciones - Mis Finanzas</title>
+
+<link rel="stylesheet" href="css/app.css">
+```
+
+</head>
+
+<body>
+
+<div id="menuPrincipal"></div>
+
+<main class="contenido-principal">
+
+```
+<header class="encabezado-pagina">
+    <div>
+        <h1>Proyecciones</h1>
+        <p>
+            Consulta cómo se verá tu dinero considerando
+            tus ingresos y compromisos futuros.
+        </p>
+    </div>
+</header>
+
+<section class="seccion">
+
+    <div class="acciones">
+
+        <button
+            type="button"
+            class="btn-secundario"
+            id="btnMesAnterior">
+            ← Mes anterior
+        </button>
+
+        <div style="text-align:center; flex:1;">
+
+            <h2
+                id="mesProyeccion"
+                style="margin:0;">
+                Cargando...
+            </h2>
+
+        </div>
+
+        <button
+            type="button"
+            class="btn-secundario"
+            id="btnMesSiguiente">
+            Mes siguiente →
+        </button>
+
+    </div>
+
+</section>
+<section class="panel-dashboard">
+
+    <div class="panel-dashboard-cabecera">
+
+        <div>
+
+            <h2>
+                🧠 Asistente financiero
+            </h2>
+
+            <p>
+                Analiza tus compras y deudas para encontrar
+                oportunidades de liquidación o adelanto de pagos
+                y liberarte más rápido.
+            </p>
+
+        </div>
+
+        <div>
+
+            <button
+                type="button"
+                class="btn-principal"
+                id="btnMostrarRecomendaciones">
+                🧠 Ver recomendaciones
+            </button>
+
+        </div>
+
+    </div>
+
+    <div
+        id="panelRecomendaciones"
+        style="display:none; margin-top:20px;"
+    >
+
+        <div
+            style="
+                padding:16px;
+                border-radius:12px;
+                background:#f8eaea;
+                margin-bottom:20px;
+            "
+        >
+
+            <strong>
+                Importante:
+            </strong>
+
+            <div style="margin-top:6px;">
+
+                Estas recomendaciones son únicamente informativas.
+                La aplicación no registra ningún pago automáticamente.
+
+                Si decides realizar un abono o liquidar una deuda,
+                debes hacerlo desde el módulo <strong>Deudas</strong>.
+
+            </div>
+
+        </div>
+
+        <div id="contenidoOportunidadesAbono">
+
+            <div
+                style="
+                    padding:20px;
+                    text-align:center;
+                    color:#707070;
+                "
+            >
+                Cargando...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+<section class="resumen-tarjetas">
+
+    <div class="tarjeta-resumen">
+        <div class="tarjeta-resumen-titulo">
+            Ingresos esperados
+        </div>
+
+        <div
+            class="tarjeta-resumen-valor"
+            id="proyeccionIngresos">
+            $0.00
+        </div>
+    </div>
+
+    <div class="tarjeta-resumen">
+        <div class="tarjeta-resumen-titulo">
+            Gastos
+        </div>
+
+        <div
+            class="tarjeta-resumen-valor"
+            id="proyeccionGastos">
+            $0.00
+        </div>
+    </div>
+
+    <div class="tarjeta-resumen">
+        <div class="tarjeta-resumen-titulo">
+            Tarjetas
+        </div>
+
+        <div
+            class="tarjeta-resumen-valor"
+            id="proyeccionTarjetas">
+            $0.00
+        </div>
+    </div>
+
+    <div class="tarjeta-resumen">
+        <div class="tarjeta-resumen-titulo">
+            Abonos de deudas
+        </div>
+
+        <div
+            class="tarjeta-resumen-valor"
+            id="proyeccionDeudas">
+            $0.00
+        </div>
+    </div>
+
+</section>
+
+<section class="panel-dashboard">
+
+    <div class="panel-dashboard-cabecera">
+
+        <div>
+
+            <h2>
+                Estado de tus ingresos
+            </h2>
+
+            <p>
+                Diferencia entre el dinero cuya fecha ya pasó
+                y el dinero que todavía está pendiente de recibir.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="resumen-tarjetas">
+
+        <div class="tarjeta-resumen">
+
+            <div class="tarjeta-resumen-titulo">
+                🟢 Ya recibido
+            </div>
+
+            <div
+                class="tarjeta-resumen-valor"
+                id="proyeccionIngresosRecibidos">
+                $0.00
+            </div>
+
+        </div>
+
+        <div class="tarjeta-resumen">
+
+            <div class="tarjeta-resumen-titulo">
+                🔵 Por recibir
+            </div>
+
+            <div
+                class="tarjeta-resumen-valor"
+                id="proyeccionIngresosPendientes">
+                $0.00
+            </div>
+
+        </div>
+
+    </div>
+
+    <div
+        style="
+            margin-top:15px;
+            padding:15px;
+            border-radius:12px;
+            background:#f8f8f8;
+            color:#707070;
+        "
+    >
+        Esta clasificación se realiza tomando como referencia
+        la fecha del ingreso. Un ingreso con fecha futura se
+        considera por recibir dentro de la proyección.
+    </div>
+
+</section>
+
+<section class="panel-dashboard">
+
+    <div class="panel-dashboard-cabecera">
+
+        <div>
+
+            <h2>
+                Resultado proyectado
+            </h2>
+
+            <p>
+                Dinero que quedaría después de cubrir
+                los compromisos registrados.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="resumen-tarjetas">
+
+        <div class="tarjeta-resumen">
+
+            <div class="tarjeta-resumen-titulo">
+                Total de compromisos
+            </div>
+
+            <div
+                class="tarjeta-resumen-valor"
+                id="proyeccionCompromisos">
+                $0.00
+            </div>
+
+        </div>
+
+        <div class="tarjeta-resumen">
+
+            <div class="tarjeta-resumen-titulo">
+                Dinero restante proyectado
+            </div>
+
+            <div
+                class="tarjeta-resumen-valor"
+                id="proyeccionRestante">
+                $0.00
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="panel-dashboard">
+
+    <div class="panel-dashboard-cabecera">
+
+        <div>
+
+            <h2>
+                Distribución por quincena
+            </h2>
+
+            <p>
+                Consulta cuánto necesitas cubrir
+                en cada periodo.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="tabla-contenedor">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Periodo</th>
+                    <th>Ingresos</th>
+                    <th>Gastos</th>
+                    <th>Tarjetas</th>
+                    <th>Deudas</th>
+                    <th>Total a cubrir</th>
+                    <th>Resultado</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="tablaQuincenas">
+
+                <tr>
+                    <td colspan="7">
+                        Cargando...
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<section class="panel-dashboard">
+
+    <div class="panel-dashboard-cabecera">
+
+        <div>
+
+            <h2>
+                Detalle de compromisos
+            </h2>
+
+            <p>
+                Movimientos considerados para esta
+                proyección.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="tabla-contenedor">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Fecha</th>
+                    <th>Tipo</th>
+                    <th>Concepto</th>
+                    <th>Importe</th>
+                    <th>Origen</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="tablaDetalle">
+
+                <tr>
+                    <td colspan="5">
+                        Cargando...
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<section class="panel-dashboard">
+
+    <div class="panel-dashboard-cabecera">
+
+        <div>
+
+            <h2>
+                Deudas pendientes
+            </h2>
+
+            <p>
+                Consulta tus deudas actuales.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div id="tablaDeudasProyeccion">
+
+        <div
+            style="
+                padding:20px;
+                text-align:center;
+                color:#707070;
+            "
+        >
+            Cargando...
+        </div>
+
+    </div>
+
+</section>
+
+
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="js/config.js"></script>
+
+<script src="js/supabase.js"></script>
+
+<script src="js/auth.js"></script>
+
+<script src="js/menu.js"></script>
+
+<script src="js/proyecciones.js"></script>
+
+<script src="js/app.js"></script>
+
+</body>
+
+</html>

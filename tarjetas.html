@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Mis Finanzas - Tarjetas</title>
+
+    <link
+        rel="stylesheet"
+        href="css/app.css">
+
+    <style>
+
+        /* =====================================================
+           TARJETAS - DISEÑO HORIZONTAL
+           ===================================================== */
+
+        .tarjeta-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .tarjeta-icono {
+            flex: 0 0 auto;
+            font-size: 42px;
+        }
+
+        .tarjeta-info {
+            flex: 1 1 auto;
+            min-width: 180px;
+        }
+
+        .tarjeta-info h3 {
+            margin: 0 0 5px 0;
+        }
+
+        .tarjeta-info span,
+        .tarjeta-info small {
+            display: block;
+        }
+
+        .tarjeta-derecha {
+            display: flex;
+            align-items: stretch;
+            justify-content: flex-end;
+            gap: 10px;
+            flex: 0 0 auto;
+            flex-wrap: nowrap;
+        }
+
+        .tarjeta-metrica {
+            min-width: 145px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            background: rgba(139, 0, 0, 0.06);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+
+        .tarjeta-metrica strong {
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .tarjeta-metrica span {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .tarjeta-acciones {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 5px;
+        }
+
+        .tarjeta-acciones button {
+            min-width: 40px;
+            min-height: 40px;
+        }
+
+        /* =====================================================
+           RESUMEN
+           ===================================================== */
+
+        .resumen-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        /* =====================================================
+           PAGO DEL PERIODO
+           ===================================================== */
+
+        .pago-periodo-detalle {
+            margin-top: 15px;
+            padding: 18px;
+            border-radius: 12px;
+            background: rgba(139, 0, 0, 0.04);
+        }
+
+        .pago-periodo-detalle h3 {
+            margin-top: 0;
+        }
+
+        .periodo-tarjeta {
+            margin-top: 15px;
+            padding: 15px;
+            background: #fff;
+            border-radius: 10px;
+            border: 1px solid rgba(0,0,0,.08);
+        }
+
+        .periodo-tarjeta-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .periodo-compra {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 9px 0;
+            border-bottom: 1px solid rgba(0,0,0,.06);
+        }
+
+        .periodo-compra:last-child {
+            border-bottom: none;
+        }
+
+        .periodo-compra-info {
+            flex: 1;
+        }
+
+        .periodo-compra-info strong {
+            display: block;
+        }
+
+        .periodo-compra-info small {
+            display: block;
+            margin-top: 3px;
+        }
+
+        .periodo-compra-monto {
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .periodo-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 2px solid rgba(139,0,0,.15);
+            font-size: 18px;
+        }
+
+        .periodo-vacio {
+            padding: 15px;
+            text-align: center;
+            opacity: .75;
+        }
+
+        /* =====================================================
+           COMPRAS
+           ===================================================== */
+
+        .compras-tarjeta {
+            margin-top: 15px;
+        }
+
+        .compras-tarjeta-titulo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+        .grupo-compras-tarjeta {
+            margin-bottom: 15px;
+        }
+
+        .grupo-compras-tarjeta-titulo {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .grupo-compras-tarjeta-titulo span {
+            opacity: .75;
+        }
+
+        /* =====================================================
+           RESPONSIVE
+           ===================================================== */
+
+        @media (max-width: 1100px) {
+
+            .tarjeta-card {
+                flex-wrap: wrap;
+            }
+
+            .tarjeta-info {
+                min-width: 250px;
+            }
+
+            .tarjeta-derecha {
+                width: 100%;
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 3px;
+            }
+
+            .tarjeta-metrica {
+                flex: 0 0 150px;
+            }
+
+        }
+
+        @media (max-width: 750px) {
+
+            .resumen-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tarjeta-card {
+                align-items: flex-start;
+            }
+
+            .tarjeta-derecha {
+                flex-wrap: wrap;
+                overflow-x: visible;
+            }
+
+            .tarjeta-metrica {
+                flex: 1 1 140px;
+            }
+
+            .periodo-compra,
+            .periodo-tarjeta-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+
+<style>
+.tarjetas-controles{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:18px;
+    margin:22px 0;
+    padding:18px;
+    background:#fff;
+    border:1px solid rgba(0,0,0,.08);
+    border-radius:14px;
+    box-shadow:0 6px 18px rgba(0,0,0,.05);
+}
+.tarjetas-filtro-principal{
+    flex:1;
+    max-width:520px;
+}
+.tarjetas-filtro-principal label{
+    display:block;
+    margin-bottom:7px;
+    font-weight:700;
+    font-size:13px;
+}
+.tarjetas-filtro-principal select{
+    width:100%;
+    min-height:44px;
+    padding:9px 12px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    background:#fff;
+}
+.tarjetas-acciones-principales{
+    display:flex;
+    gap:9px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+}
+.tarjeta-detalle-vacio{
+    padding:38px 20px;
+    text-align:center;
+    background:#fff;
+    border:1px dashed rgba(0,0,0,.14);
+    border-radius:14px;
+    color:#666;
+}
+.tarjeta-detalle-vacio strong{
+    display:block;
+    color:#333;
+    margin-bottom:8px;
+}
+.tarjeta-detalle-vacio p{
+    margin:0;
+}
+@media(max-width:800px){
+    .tarjetas-controles{
+        flex-direction:column;
+        align-items:stretch;
+    }
+    .tarjetas-filtro-principal{
+        max-width:none;
+    }
+    .tarjetas-acciones-principales{
+        justify-content:stretch;
+    }
+    .tarjetas-acciones-principales button{
+        flex:1 1 100%;
+    }
+}
+</style>
+
+</head>
+
+
+<body>
+
+<div id="menuPrincipal"></div>
+
+
+<main class="contenido-principal">
+
+
+    <!-- ===================================== -->
+    <!-- ENCABEZADO -->
+    <!-- ===================================== -->
+
+    <header class="encabezado">
+
+        <div>
+
+            <h1>
+                💳 Tarjetas
+            </h1>
+
+            <p id="fechaActual">
+                Cargando fecha...
+            </p>
+
+        </div>
+
+
+        <div class="usuario-header">
+
+            <span id="usuarioNombre">
+                Usuario
+            </span>
+
+        </div>
+
+    </header>
+
+
+    <!-- ===================================== -->
+    <!-- ESTADO DE CONEXIÓN -->
+    <!-- ===================================== -->
+
+    <div
+        id="estadoConexion"
+        class="estado-conexion">
+
+        Conectando...
+
+    </div>
+
+
+    <!-- ===================================== -->
+    <!-- RESUMEN -->
+    <!-- ===================================== -->
+
+    <section class="resumen-grid">
+
+        <div class="tarjeta-resumen">
+            <span>💳 Deuda total</span>
+            <strong id="totalDeudaTarjetas">$0.00</strong>
+        </div>
+
+        <div class="tarjeta-resumen">
+            <span>💰 Crédito disponible</span>
+            <strong id="creditoDisponibleTarjetas">$0.00</strong>
+        </div>
+
+        <div class="tarjeta-resumen">
+            <span>💳 Tarjetas activas</span>
+            <strong id="cantidadTarjetas">0</strong>
+        </div>
+
+    </section>
+
+
+    <!-- ===================================== -->
+    <!-- DETALLE PAGO DEL PERIODO -->
+    <!-- ===================================== -->
+
+    <section class="seccion">
+
+       
+
+
+        <div
+    id="detallePagoPeriodo"
+    class="pago-periodo-detalle"
+    style="display:none;">
+
+            <div class="loading">
+                Calculando pago del periodo...
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ===================================== -->
+    <!-- ACCIONES -->
+    <!-- ===================================== -->
+
+    <section class="tarjetas-controles">
+
+        <div class="tarjetas-filtro-principal">
+            <label for="filtroTarjeta">
+                💳 Selecciona una tarjeta para ver su detalle
+            </label>
+
+            <select id="filtroTarjeta" onchange="seleccionarTarjeta(this.value)">
+                <option value="">Selecciona una tarjeta...</option>
+            </select>
+        </div>
+
+        <div class="tarjetas-acciones-principales">
+            <button
+                type="button"
+                class="btn-principal"
+                onclick="nuevaTarjeta()">
+                ➕ Nueva tarjeta
+            </button>
+
+            <button
+                type="button"
+                class="btn-secundario"
+                onclick="registrarGastoTarjetaSeleccionada()">
+                🛒 Registrar gasto
+            </button>
+
+            <button
+                type="button"
+                class="btn-secundario"
+                onclick="registrarTodosLosPagosTarjetas()">
+                ✅ Ya pagué estos pagos
+            </button>
+        </div>
+
+    </section>
+
+
+    <!-- ===================================== -->
+    <!-- LISTA DE TARJETAS -->
+    <!-- ===================================== -->
+
+    <section class="seccion">
+
+        <div
+            id="mensajeSeleccionTarjeta"
+            class="tarjeta-detalle-vacio">
+
+            <strong>💳 Selecciona una tarjeta</strong>
+
+            <p>
+                Aquí aparecerán el límite, deuda, disponible,
+                pago del periodo y tus compras.
+            </p>
+
+        </div>
+
+        <div id="listaTarjetas" style="display:none;">
+            <p class="mensaje-vacio">
+                Cargando tarjetas...
+            </p>
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<!-- ===================================================== -->
+<!-- MODAL TARJETA -->
+<!-- ===================================================== -->
+
+<div
+    id="modalTarjeta"
+    class="modal"
+    style="display:none;"
+    aria-hidden="true">
+
+    <div class="modal-contenido">
+
+        <div class="modal-header">
+
+            <h2 id="modalTarjetaTitulo">
+                Nueva tarjeta
+            </h2>
+
+            <button
+                type="button"
+                class="modal-cerrar"
+                onclick="cerrarModalTarjeta()">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <div class="formulario">
+
+
+            <div class="campo">
+
+                <label for="tarjetaNombre">
+                    Nombre de la tarjeta
+                </label>
+
+                <input
+                    type="text"
+                    id="tarjetaNombre"
+                    placeholder="Ej. Tarjeta BBVA">
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="tarjetaBanco">
+                    Banco
+                </label>
+
+                <input
+                    type="text"
+                    id="tarjetaBanco"
+                    placeholder="Ej. BBVA">
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="tarjetaLimite">
+                    Límite de crédito
+                </label>
+
+                <input
+                    type="number"
+                    id="tarjetaLimite"
+                    step="0.01"
+                    min="0"
+                    placeholder="20000">
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="tarjetaDiaCorte">
+                    Día de corte
+                </label>
+
+                <input
+                    type="number"
+                    id="tarjetaDiaCorte"
+                    min="1"
+                    max="31"
+                    placeholder="23">
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="tarjetaDiaLimite">
+                    Día límite de pago del banco
+                </label>
+
+                <input
+                    type="number"
+                    id="tarjetaDiaLimite"
+                    min="1"
+                    max="31"
+                    placeholder="12">
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="tarjetaDiaPago">
+                    Día que yo realizo el pago
+                </label>
+
+                <input
+                    type="number"
+                    id="tarjetaDiaPago"
+                    min="1"
+                    max="31"
+                    placeholder="30">
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="tarjetaNotas">
+                    Notas
+                </label>
+
+                <textarea
+                    id="tarjetaNotas"
+                    rows="3"
+                    placeholder="Información adicional..."></textarea>
+
+            </div>
+
+
+            <div
+                id="mensajeTarjetaModal"
+                class="mensaje-formulario">
+            </div>
+
+
+            <div class="modal-acciones">
+
+                <button
+                    type="button"
+                    class="btn-secundario"
+                    onclick="cerrarModalTarjeta()">
+
+                    Cancelar
+
+                </button>
+
+
+                <button
+                    type="button"
+                    id="btnGuardarTarjeta"
+                    class="btn-principal"
+                    onclick="guardarTarjeta()">
+
+                    Guardar tarjeta
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ===================================================== -->
+<!-- MODAL COMPRA -->
+<!-- ===================================================== -->
+
+<div
+    id="modalCompraTarjeta"
+    class="modal"
+    style="display:none;"
+    aria-hidden="true">
+
+    <div class="modal-contenido">
+
+        <div class="modal-header">
+
+            <h2 id="modalCompraTarjetaTitulo">
+                Nueva compra con tarjeta
+            </h2>
+
+            <button
+                type="button"
+                class="modal-cerrar"
+                onclick="cerrarModalCompraTarjeta()">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <div class="formulario">
+
+
+            <div class="campo">
+
+                <label for="compraTarjetaSeleccion">
+                    Tarjeta
+                </label>
+
+                <select id="compraTarjetaSeleccion">
+
+                    <option value="">
+                        Selecciona una tarjeta
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="compraConcepto">
+                    Concepto
+                </label>
+
+                <input
+                    type="text"
+                    id="compraConcepto"
+                    placeholder="Ej. Supermercado">
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="compraDescripcion">
+                    Descripción del gasto
+                </label>
+
+                <textarea
+                    id="compraDescripcion"
+                    rows="3"
+                    placeholder="Ej. Compra de despensa, gasolina, ropa, etc."></textarea>
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="compraMonto">
+                    Monto
+                </label>
+
+                <input
+                    type="number"
+                    id="compraMonto"
+                    min="0"
+                    step="0.01"
+                    placeholder="0.00">
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="compraTipo">
+                    Tipo de compra
+                </label>
+
+                <select id="compraTipo">
+
+                    <option value="normal">
+                        Compra normal / contado
+                    </option>
+
+                    <option value="meses">
+                        Meses sin intereses
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div
+                class="campo"
+                id="contenedorMesesCompra">
+
+                <label for="compraMeses">
+                    Número de meses
+                </label>
+
+                <input
+                    type="number"
+                    id="compraMeses"
+                    min="2"
+                    step="1"
+                    placeholder="Ej. 6">
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="compraFecha">
+                    Fecha de compra
+                </label>
+
+                <input
+                    type="date"
+                    id="compraFecha">
+
+            </div>
+
+
+            <div
+                id="mensajeCompraTarjetaModal"
+                class="mensaje-formulario">
+            </div>
+
+
+            <div class="modal-acciones">
+
+                <button
+                    type="button"
+                    class="btn-secundario"
+                    onclick="cerrarModalCompraTarjeta()">
+
+                    Cancelar
+
+                </button>
+
+
+                <button
+                    type="button"
+                    id="btnGuardarCompraTarjeta"
+                    class="btn-principal"
+                    onclick="guardarCompraTarjeta(event)">
+
+                    Guardar compra
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ===================================================== -->
+<!-- SCRIPTS -->
+<!-- ===================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="js/config.js"></script>
+
+<script src="js/supabase.js"></script>
+
+<script src="js/auth.js"></script>
+
+<script src="js/menu.js"></script>
+
+<script src="js/tarjetas.js"></script>
+
+<script src="js/compras_tarjeta.js"></script>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async function () {
+
+        if (
+            typeof mostrarFechaTarjetas ===
+            "function"
+        ) {
+
+            mostrarFechaTarjetas();
+
+        }
+
+
+        const {
+            data: {
+                session
+            }
+        } =
+            await supabaseClient.auth.getSession();
+
+
+        if (!session) {
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+
+        const usuarioNombre =
+            document.getElementById(
+                "usuarioNombre"
+            );
+
+
+        if (usuarioNombre) {
+
+            usuarioNombre.textContent =
+                session.user.user_metadata?.nombre ||
+                "JESUS";
+
+        }
+
+
+        const estado =
+            document.getElementById(
+                "estadoConexion"
+            );
+
+
+        if (estado) {
+
+            estado.textContent =
+                "✅ Conexión con Supabase funcionando correctamente.";
+
+        }
+
+    });
+
+</script>
+
+
+</body>
+
+</html>
