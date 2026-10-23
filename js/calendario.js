@@ -4149,6 +4149,32 @@ async function revertirPagoTarjetaCalendario(pagoId) {
     }
 }
 
+function crearHTMLPagoHistorial(pago) {
+
+    const info = extraerNumeroPagoHistorial(pago.concepto);
+    const conceptoBase = obtenerConceptoBaseHistorial(pago.concepto);
+    const detalle = info
+        ? `Pago ${info.numero} de ${info.total}`
+        : "Pago registrado";
+
+    return `
+        <div class="historial-pago-item">
+            <div class="historial-pago-info">
+                <span class="historial-pago-concepto">${escaparHTML(conceptoBase || "Pago de tarjeta")}</span>
+                <span class="historial-pago-fecha">${escaparHTML(formatearFechaCompleta(pago.fecha))} · ${escaparHTML(detalle)}</span>
+            </div>
+            <div class="historial-pago-importe">${formatearMoneda(convertirNumero(pago.importe))}</div>
+            <button
+                type="button"
+                class="btn-secundario"
+                onclick="revertirPagoTarjetaCalendario('${escaparAtributoHTML(pago.id)}')">
+                ↩️ Revertir
+            </button>
+        </div>
+    `;
+}
+
+
 async function abrirHistorialPagosCalendario() {
 
     const modal =
