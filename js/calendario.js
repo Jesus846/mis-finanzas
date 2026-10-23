@@ -842,257 +842,198 @@ function prepararMovimientosMes(
    PAGOS PENDIENTES DE TARJETA
    ============================================================ */
 
+
 function agregarPagosPendientesCompra(
     compra,
     primerDia,
     ultimoDia,
     movimientos
 ) {
-
     if (!compra) return;
 
+    const mesesTotales = parseInt(
+        compra.meses_totales || 1,
+        10
+    );
 
-    const mesesTotales =
-        parseInt(
-            compra.meses_totales || 1,
-            10
-        );
+    const mesesPagados = parseInt(
+        compra.meses_pagados || 0,
+        10
+    );
 
+    const saldoPendiente = convertirNumero(
+        compra.saldo_pendiente
+    );
 
-    const mesesPagados =
-        parseInt(
-            compra.meses_pagados || 0,
-            10
-        );
-
-
-    const saldoPendiente =
-        convertirNumero(
-            compra.saldo_pendiente
-        );
-
-
-    const mensualidad =
-        convertirNumero(
-            compra.mensualidad
-        );
-
+    const mensualidad = convertirNumero(
+        compra.mensualidad
+    );
 
     if (
         saldoPendiente <= 0 ||
         mesesPagados >= mesesTotales
     ) {
-
         return;
-
     }
 
+    const tarjeta = compra.tarjetas || {};
+
+    if (!compra.fecha_compra) return;
+
+    const fechaCompra = convertirFechaLocal(
+        compra.fecha_compra
+    );
+
+    if (!fechaCompra) return;
+
+    // Calcular el primer pago igual que en tarjetas.js.
+    const diaCorte = parseInt(
+        tarjeta.dia_corte,
+        10
+    );
+
+    const diaPago = parseInt(
+        tarjeta.dia_pago,
+        10
+    );
 
     if (
-        !compra.fecha_primer_pago
+        !Number.isInteger(diaCorte) ||
+        diaCorte < 1 ||
+        diaCorte > 31 ||
+        !Number.isInteger(diaPago) ||
+        diaPago < 1 ||
+        diaPago > 31
     ) {
-
-        return;
-
-    }
-
-
-    const fechaInicial =
-        convertirFechaLocal(
-            compra.fecha_primer_pago
+        console.warn(
+            "No se pudo calcular el calendario de la compra:",
+            compra.concepto,
+            "Faltan los días de corte o pago de la tarjeta."
         );
-
-
-    if (!fechaInicial) {
-
         return;
-
     }
 
+    let anioCorte = fechaCompra.getFullYear();
+    let mesCorte = fechaCompra.getMonth();
 
-    const tarjeta =
-        compra.tarjetas || {};
+    const ultimoDiaCorte = new Date(
+        anioCorte,
+        mesCorte + 1,
+        0
+    ).getDate();
 
+    const corteValido = Math.min(
+        diaCorte,
+        ultimoDiaCorte
+    );
+
+    // Si la compra cae el día de corte o después,
+    // pertenece al siguiente periodo.
+    if (fechaCompra.getDate() >= corteValido) {
+        mesCorte++;
+
+        if (mesCorte > 11) {
+            mesCorte = 0;
+            anioCorte++;
+        }
+    }
+
+    const fechaCorte = crearFechaSegura(
+        anioCorte,
+        mesCorte,
+        diaCorte
+    );
+
+    let anioPago = fechaCorte.getFullYear();
+    let mesPago = fechaCorte.getMonth();
+
+    if (diaPago <= fechaCorte.getDate()) {
+        mesPago++;
+
+        if (mesPago > 11) {
+            mesPago = 0;
+            anioPago++;
+        }
+    }
+
+    const primerPago = crearFechaSegura(
+        anioPago,
+        mesPago,
+        diaPago
+    );
 
     const nombreTarjeta =
-        tarjeta.nombre ||
-        "Tarjeta";
-
+        tarjeta.nombre || "Tarjeta";
 
     const conceptoCompra =
-        compra.concepto ||
-        "Compra con tarjeta";
+        compra.concepto || "Compra con tarjeta";
 
+    let saldoRestante = saldoPendiente;
 
-    const pagosRestantes =
-        Math.max(
-            mesesTotales -
-            mesesPagados,
-            0
+    const pagosRestantes = Math.max(
+        mesesTotales - mesesPagados,
+        0
+    );
+
+    for (let i = 0; i < pagosRestantes; i++) {
+        const numeroPago = mesesPagados + i + 1;
+
+        // La fecha se calcula desde el primer pago original
+        // y los pagos ya realizados, no desde fecha_primer_pago.
+        const fechaMesPago = sumarMeses(
+            primerPago,
+            mesesPagados + i
         );
 
+        const anio = fechaMesPago.getFullYear();
+        const mes = fechaMesPago.getMonth();
 
-    let saldoRestante =
-        saldoPendiente;
+        const ultimoDiaMes = new Date(
+            anio,
+            mes + 1,
+            0
+        ).getDate();
 
+        const fechaPago = new Date(
+            anio,
+            mes,
+            Math.min(diaPago, ultimoDiaMes)
+        );
 
-    for (
-        let i = 0;
-        i < pagosRestantes;
-        i++
-    ) {
+        const importePago = Math.min(
+            mensualidad,
+            saldoRestante
+        );
 
-        const numeroPago =
-            mesesPagados +
-            i +
-            1;
-
-
-        /*
-         * Cada mensualidad conserva su mes correspondiente.
-         * El día se toma de tarjetas.dia_pago.
-         *
-         * Primero calculamos el mes de ESTA mensualidad
-         * usando i y después aplicamos el día de pago.
-         */
-
-        /*
-         * En esta aplicación, fecha_primer_pago se actualiza al
-         * siguiente vencimiento cuando se registra un pago.
-         * Por eso NO debemos volver a sumar mesesPagados: hacerlo
-         * desplaza la proyección dos veces y puede saltarse meses.
-         *
-         * i = 0 representa la próxima mensualidad pendiente.
-         * i = 1 representa la mensualidad siguiente, y así sucesivamente.
-         */
-
-        const fechaMesPago =
-            sumarMeses(
-                fechaInicial,
-                i
-            );
-
-        let fechaPago;
-
-        const diaPagoTarjeta =
-            parseInt(
-                tarjeta.dia_pago,
-                10
-            );
+        if (importePago <= 0) break;
 
         if (
-            Number.isInteger(
-                diaPagoTarjeta
-            ) &&
-            diaPagoTarjeta >= 1 &&
-            diaPagoTarjeta <= 31
-        ) {
-
-            const anio =
-                fechaMesPago.getFullYear();
-
-            const mes =
-                fechaMesPago.getMonth();
-
-            const ultimoDiaMes =
-                new Date(
-                    anio,
-                    mes + 1,
-                    0
-                ).getDate();
-
-            const dia =
-                Math.min(
-                    diaPagoTarjeta,
-                    ultimoDiaMes
-                );
-
-            fechaPago =
-                new Date(
-                    anio,
-                    mes,
-                    dia
-                );
-
-        } else {
-
-            fechaPago =
-                fechaMesPago;
-
-        }
-
-
-        if (
-            !estaDentroDelMes(
+            estaDentroDelMes(
                 fechaPago,
                 primerDia,
                 ultimoDia
             )
         ) {
-
-            continue;
-
-        }
-
-
-        const importePago =
-            Math.min(
-                mensualidad,
-                saldoRestante
-            );
-
-
-        if (
-            importePago <= 0
-        ) {
-
-            continue;
-
-        }
-
-
-        movimientos.push({
-
-            fecha: fechaPago,
-
-            tipo: "tarjeta",
-
-            concepto:
-                `${nombreTarjeta} - ${conceptoCompra}`,
-
-            importe:
-                importePago,
-
-            compraId:
-                compra.id,
-
-            tarjetaId:
-                compra.tarjeta_id,
-
-            numeroPago:
+            movimientos.push({
+                fecha: fechaPago,
+                tipo: "tarjeta",
+                concepto:
+                    `${nombreTarjeta} - ${conceptoCompra}`,
+                importe: importePago,
+                compraId: compra.id,
+                tarjetaId: compra.tarjeta_id,
                 numeroPago,
-
-            mesesTotales:
                 mesesTotales,
-
-            mesesPagados:
                 mesesPagados,
+                origen: compra
+            });
+        }
 
-            origen:
-                compra
-
-        });
-
-
-        saldoRestante =
-            Math.max(
-                saldoRestante -
-                importePago,
-                0
-            );
-
+        saldoRestante = Math.max(
+            saldoRestante - importePago,
+            0
+        );
     }
-
 }
 
 
