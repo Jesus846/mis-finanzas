@@ -957,20 +957,19 @@ function agregarPagosPendientesCompra(
          */
 
         /*
-         * fecha_primer_pago es la fecha del primer pago original.
-         * Como ya existen mesesPagados, debemos avanzar esos meses
-         * antes de calcular el siguiente pago pendiente.
+         * En esta aplicación, fecha_primer_pago se actualiza al
+         * siguiente vencimiento cuando se registra un pago.
+         * Por eso NO debemos volver a sumar mesesPagados: hacerlo
+         * desplaza la proyección dos veces y puede saltarse meses.
          *
-         * Ejemplo:
-         * primer pago = septiembre
-         * mesesPagados = 1
-         * siguiente pago = octubre (Pago 2), no septiembre (Pago 3).
+         * i = 0 representa la próxima mensualidad pendiente.
+         * i = 1 representa la mensualidad siguiente, y así sucesivamente.
          */
 
         const fechaMesPago =
             sumarMeses(
                 fechaInicial,
-                mesesPagados + i
+                i
             );
 
         let fechaPago;
@@ -4159,7 +4158,7 @@ async function abrirHistorialPagosCalendario() {
 
     const contenedor =
         document.getElementById(
-            "contenedorHistorialPagos"
+            "listaHistorialPagos"
         );
 
     const periodo =
